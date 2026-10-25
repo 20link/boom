@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>A Little Surprise ♡</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: #24203f;
+    font-family: Georgia, serif;
+}
+
+#scene {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    isolation: isolate;
+    background: #24203f;
+}
+
+/* BACKGROUND */
+
+#background {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+/* ÉTOILES QUI SCINTILLENT */
+
+.star {
+    position: absolute;
+    z-index: 1;
+    color: #fff5ff;
+    pointer-events: none;
+    user-select: none;
+    animation: twinkle var(--duration, 2s) ease-in-out infinite alternate;
+    animation-delay: var(--delay, 0s);
+    text-shadow: 0 0 6px #eabfff, 0 0 14px #c77dff;
+}
+
+@keyframes twinkle {
+    0% {
+        opacity: .2;
+        transform: scale(.65) rotate(0deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1.25) rotate(25deg);
+    }
+}
+
+/* PETITES ÉTOILES QUI FLOTTENT */
+
+.floating-star {
+    position: absolute;
+    z-index: 2;
+    color: #ffd9ff;
+    pointer-events: none;
+    user-select: none;
+    text-shadow: 0 0 8px #ff9ce8, 0 0 18px #c77dff;
+    animation: floatAround var(--duration, 8s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+}
+
+@keyframes floatAround {
+    0% {
+        transform: translate(0, 0) rotate(0deg) scale(.7);
+        opacity: .25;
+    }
+
+    25% {
+        transform: translate(25px, -35px) rotate(90deg) scale(1.1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translate(-10px, -65px) rotate(180deg) scale(.8);
+        opacity: .65;
+    }
+
+    75% {
+        transform: translate(-35px, -25px) rotate(270deg) scale(1.2);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(0, 0) rotate(360deg) scale(.7);
+        opacity: .25;
+    }
+}
+
+/* ÉTOILES FILANTES */
+
+.shooting-star {
+    position: absolute;
+    z-index: 3;
+    top: -15%;
+    left: -20%;
+    width: var(--length, 120px);
+    height: 3px;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 185, 255, .4),
+        #fff,
+        #ffb4f0
+    );
+    box-shadow:
+        0 0 6px #ffb4f0,
+        0 0 14px #db83ff;
+    transform: rotate(-35deg);
+    animation: shooting var(--duration, 2s) linear infinite;
+    animation-delay: var(--delay, 0s);
+}
+
+.shooting-star::before {
+    content: "✦";
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(35deg);
+    font-size: 17px;
+    color: white;
+    text-shadow: 0 0 8px #ffb4f0, 0 0 18px #e6a0ff;
+}
+
+@keyframes shooting {
+    0% {
+        transform: translate(0, 0) rotate(-35deg);
+        opacity: 0;
+    }
+
+    5% {
+        opacity: 1;
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(145vw, 100vh) rotate(-35deg);
+        opacity: 0;
+    }
+}
+
+/* PETITS GLITTERS */
+
+.sparkle {
+    position: absolute;
+    z-index: 2;
+    color: #ffbdf4;
+    pointer-events: none;
+    animation: sparklePop 2.5s ease-in-out infinite;
+    text-shadow: 0 0 8px #ff9ce8;
+}
+
+@keyframes sparklePop {
+    0%, 100% {
+        opacity: 0;
+        transform: scale(.3) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2) rotate(45deg);
+    }
+}
+
+/* OURS */
+
+#bear {
+    position: absolute;
+    width: 220px;
+    height: 260px;
+    left: 50%;
+    top: -300px;
+    transform: translateX(-50%);
+    z-index: 5;
+}
+
+#bear img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* CHUTE */
+
+#bear.falling {
+    animation: fall 3s ease-in-out forwards;
+}
+
+@keyframes fall {
+    0% {
+        top: -300px;
+        transform: translateX(-50%) rotate(-12deg);
+    }
+
+    40% {
+        transform: translateX(-50%) rotate(10deg);
+    }
+
+    75% {
+        top: 40%;
+        transform: translateX(-50%) rotate(-5deg) scaleY(.9);
+    }
+
+    85% {
+        top: 35%;
+        transform: translateX(-50%) rotate(4deg) scaleY(1.05);
+    }
+
+    100% {
+        top: 40%;
+        transform: translateX(-50%) rotate(0);
+    }
+}
+
+/* REBOND */
+
+#bear.bounce {
+    animation: bounce .6s ease;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateX(-50%) scaleY(.9);
+    }
+
+    40% {
+        transform: translateX(-50%) scaleY(1.08);
+    }
+
+    100% {
+        transform: translateX(-50%) scaleY(1);
+    }
+}
+
+/* REGARDER AUTOUR */
+
+#bear.look {
+    animation: look .6s ease;
+}
+
+@keyframes look {
+    0% {
+        transform: translateX(-50%) rotate(0);
+    }
+
+    35% {
+        transform: translateX(-50%) rotate(-8deg);
+    }
+
+    70% {
+        transform: translateX(-50%) rotate(8deg);
+    }
+
+    100% {
+        transform: translateX(-50%) rotate(0);
+    }
+}
+
+/* REGARD VERS LE BAS */
+
+#bear.notice {
+    animation: notice .6s forwards;
+}
+
+@keyframes notice {
+    to {
+        transform: translateX(-50%) rotate(8deg) translateY(8px);
+    }
+}
+
+/* GESTE FINAL */
+
+#bear.throw {
+    animation: throw .7s ease forwards;
+}
+
+@keyframes throw {
+    0% {
+        transform: translateX(-50%) rotate(8deg);
+    }
+
+    50% {
+        transform: translateX(-50%) rotate(-8deg) translateY(-10px);
+    }
+
+    100% {
+        transform: translateX(-50%) rotate(0);
+    }
+}
+
+/* PANCARTE */
+
+#message {
+    position: absolute;
+    z-index: 6;
+    top: 8%;
+    left: 50%;
+    width: min(90%, 650px);
+    padding: 22px 18px;
+    text-align: center;
+
+    color: #fff0fa;
+    font-family: "Arial Black", Arial, sans-serif;
+    font-size: clamp(17px, 3.5vw, 32px);
+    line-height: 1.5;
+    letter-spacing: .5px;
+
+    background: linear-gradient(
+        135deg,
+        rgba(111, 57, 145, .97),
+        rgba(222, 105, 183, .97)
+    );
+
+    border: 3px solid #ffc5f0;
+    border-radius: 18px;
+
+    box-shadow:
+        0 0 12px #ff9edb,
+        0 0 30px rgba(255, 100, 210, .65),
+        inset 0 0 15px rgba(255, 255, 255, .15);
+
+    opacity: 0;
+    transform: translate(-50%, -25px) rotate(-5deg);
+    transform-origin: center;
+}
+
+#message span {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 14px;
+
+    color: #77315f;
+    background: #ffd0ef;
+    border: 1px solid #ffe6f7;
+    border-radius: 8px;
+
+    font-size: .65em;
+    transform: rotate(2deg);
+}
+
+#message.show {
+    animation: appear 1s ease-out forwards;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -35px) rotate(-5deg) scale(.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0) rotate(-5deg) scale(1);
+    }
+}
+
+/* TEXTE EN BAS */
+
+#hint {
+    position: absolute;
+    z-index: 8;
+    bottom: 25px;
+    width: 100%;
+    padding: 0 10px;
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    text-shadow: 0 0 8px #24203f;
+}
+
+/* CŒURS */
+
+.heart {
+    position: absolute;
+    z-index: 7;
+    bottom: 15%;
+    animation: heartUp 2.5s forwards;
+    pointer-events: none;
+}
+
+@keyframes heartUp {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(.5);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-220px) scale(1.5);
+    }
+}
+
+/* TÉLÉPHONE */
+
+@media (max-width: 480px) {
+    #bear {
+        width: 180px;
+        height: 220px;
+    }
+
+    #message {
+        top: 9%;
+        width: 88%;
+        padding: 16px 12px;
+        font-size: 19px;
+    }
+
+    #message span {
+        font-size: .65em;
+        padding: 4px 8px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="scene">
+
+    <!-- BACKGROUND -->
+    <img id="background" src="./background.png" alt="">
+
+    <!-- OURS -->
+    <div id="bear">
+        <img id="bearImage" src="./ours/ours1.png" alt="Petit ours">
+    </div>
+
+    <!-- PANCARTE -->
+    <div id="message">
+        GOOD LUCK! YOU CAN DO IT!
+        <br>
+        <span>YOU'RE THE BEST! </span>
+    </div>
+
+    <div id="hint">Am falling </div>
+
+</div>
+
+<script>
+const scene = document.getElementById("scene");
+const bear = document.getElementById("bear");
+const bearImage = document.getElementById("bearImage");
+const message = document.getElementById("message");
+const hint = document.getElementById("hint");
+
+/* CRÉER LES ÉTOILES FIXES QUI SCINTILLENT */
+
+for (let i = 0; i < 65; i++) {
+    const star = document.createElement("div");
+
+    star.className = "star";
+    star.textContent = Math.random() > .55 ? "✦" : "·";
+
+    star.style.left = Math.random() * 100 + "%";
+    star.style.top = Math.random() * 100 + "%";
+    star.style.fontSize = (7 + Math.random() * 17) + "px";
+
+    star.style.setProperty(
+        "--duration",
+        (1.2 + Math.random() * 3) + "s"
+    );
+
+    star.style.setProperty(
+        "--delay",
+        (-Math.random() * 4) + "s"
+    );
+
+    scene.appendChild(star);
+}
+
+/* ÉTOILES QUI FLOTTENT AUTOUR DE L'ÉCRAN */
+
+for (let i = 0; i < 12; i++) {
+    const star = document.createElement("div");
+
+    star.className = "floating-star";
+    star.textContent = ["✦", "✧", "⋆", "✩"][
+        Math.floor(Math.random() * 4)
+    ];
+
+    star.style.left = (5 + Math.random() * 90) + "%";
+    star.style.top = (10 + Math.random() * 80) + "%";
+    star.style.fontSize = (12 + Math.random() * 17) + "px";
+
+    star.style.setProperty(
+        "--duration",
+        (6 + Math.random() * 8) + "s"
+    );
+
+    star.style.setProperty(
+        "--delay",
+        (-Math.random() * 8) + "s"
+    );
+
+    scene.appendChild(star);
+}
+
+/* ÉTOILES FILANTES QUI TRAVERSENT LE CIEL */
+
+for (let i = 0; i < 5; i++) {
+    const shooting = document.createElement("div");
+
+    shooting.className = "shooting-star";
+
+    shooting.style.top = (Math.random() * 65) + "%";
+
+    shooting.style.setProperty(
+        "--length",
+        (70 + Math.random() * 100) + "px"
+    );
+
+    shooting.style.setProperty(
+        "--duration",
+        (2.2 + Math.random() * 2.5) + "s"
+    );
+
+    shooting.style.setProperty(
+        "--delay",
+        (i * 2.5 + Math.random() * 3) + "s"
+    );
+
+    scene.appendChild(shooting);
+}
+
+/* PETITS GLITTERS MAGIQUES */
+
+for (let i = 0; i < 16; i++) {
+    const sparkle = document.createElement("div");
+
+    sparkle.className = "sparkle";
+    sparkle.textContent = Math.random() > .5 ? "✧" : "·";
+
+    sparkle.style.left = Math.random() * 100 + "%";
+    sparkle.style.top = Math.random() * 100 + "%";
+    sparkle.style.fontSize = (10 + Math.random() * 13) + "px";
+    sparkle.style.animationDelay = (Math.random() * 3) + "s";
+
+    scene.appendChild(sparkle);
+}
+
+/* CHANGER L'IMAGE DE L'OURS */
+
+function showBear(number) {
+    bearImage.src = "./ours/ours" + number + ".png";
+}
+
+function changeBear(number) {
+    bearImage.dataset.number = number;
+    showBear(number);
+}
+
+/* ERREUR SI UNE IMAGE EST ABSENTE */
+
+bearImage.onerror = function() {
+    hint.textContent =
+        "Image introuvable : ours" +
+        (bearImage.dataset.number || "1") +
+        ".png — vérifie le dossier ours.";
+};
+
+/* ERREUR SI LE FOND EST ABSENT */
+
+document.getElementById("background").onerror = function() {
+    this.style.display = "none";
+    hint.textContent =
+        "background.png introuvable — vérifie son emplacement.";
+};
+
+/* ANIMATION DE L'OURS */
+
+changeBear(1);
+bear.classList.add("falling");
+
+/* IMAGE 2 */
+
+setTimeout(() => {
+    changeBear(2);
+}, 1300);
+
+/* IMAGE 3 : UN PEU PLUS BAS */
+
+setTimeout(() => {
+    changeBear(3);
+    bear.style.top = "43%";
+}, 2600);
+
+/* IMAGE 4 */
+
+setTimeout(() => {
+    changeBear(4);
+}, 4300);
+
+/* ATTERRISSAGE */
+
+setTimeout(() => {
+    bear.classList.remove("falling");
+    bear.style.top = "40%";
+    bear.classList.add("bounce");
+}, 5000);
+
+/* REGARD À GAUCHE */
+
+setTimeout(() => {
+    bear.classList.remove("bounce");
+    changeBear(5);
+    bear.classList.add("look");
+}, 5700);
+
+/* REGARD À DROITE */
+
+setTimeout(() => {
+    bear.classList.remove("look");
+    changeBear(6);
+    void bear.offsetWidth;
+    bear.classList.add("look");
+}, 6700);
+
+/* REGARDE EN BAS */
+
+setTimeout(() => {
+    bear.classList.remove("look");
+    changeBear(7);
+    bear.classList.add("notice");
+    hint.textContent = "Oh? What's that? ♡";
+}, 7700);
+
+/* GESTE FINAL */
+
+setTimeout(() => {
+    bear.classList.remove("notice");
+    bear.classList.add("throw");
+    hint.textContent = "A little surprise for you ♡";
+}, 8700);
+
+/* MESSAGE FINAL ET CŒURS */
+
+setTimeout(() => {
+    message.classList.add("show");
+    hint.textContent = "A little reminder just for you ";
+
+    for (let i = 0; i < 18; i++) {
+        setTimeout(() => {
+            const heart = document.createElement("div");
+
+            heart.className = "heart";
+
+            heart.textContent = ["🌸", "💗", "✨", "⭐️ "][
+                Math.floor(Math.random() * 4)
+            ];
+
+            heart.style.left = (15 + Math.random() * 70) + "%";
+            heart.style.fontSize = (18 + Math.random() * 20) + "px";
+
+            scene.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 2600);
+        }, i * 180);
+    }
+}, 9200);
+</script>
+
+</body>
+</html>
+```
